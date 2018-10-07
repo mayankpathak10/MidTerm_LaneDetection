@@ -1,6 +1,6 @@
 # C++ Boilerplate
-[![Build Status](https://travis-ci.org/dpiet/cpp-boilerplate.svg?branch=master)](https://travis-ci.org/dpiet/cpp-boilerplate)
-[![Coverage Status](https://coveralls.io/repos/github/dpiet/cpp-boilerplate/badge.svg?branch=master)](https://coveralls.io/github/dpiet/cpp-boilerplate?branch=master)
+[![Build Status](https://travis-ci.com/mayankpathak10/MidTerm_LaneDetection.svg?branch=master)](https://travis-ci.com/mayankpathak10/MidTerm_LaneDetection)
+[![Coverage Status](https://coveralls.io/repos/github/mayankpathak10/MidTerm_LaneDetection/badge.svg?branch=master)](https://coveralls.io/github/mayankpathak10/MidTerm_LaneDetection?branch=master)
 ---
 
 ## Overview
