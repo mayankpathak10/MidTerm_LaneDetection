@@ -1,3 +1,18 @@
+/**
+ *  @file    test.cpp
+ *  @author  Mayank Pathak
+ *  @version 1.0
+ *  @copyright GNU Public License
+ *
+ *  @brief Mid-Term Project (with partner component)
+ *
+ *  @section DESCRIPTION
+ *
+ *  This is test file to declare the test cases for LaneDetection 
+ *
+ */
+
+
 #include <gtest/gtest.h>
 
 /**

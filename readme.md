@@ -48,7 +48,15 @@ sudo ldconfig
 
 ## How to Build
 
-(Will be upadted in iteration 2)
+(Will be updated in iteration 2)
+
+## How to Run Demo
+
+(Will be updated in iteration 2)
+
+## How to run tests
+
+(Will be updated in iteration 2)
 
 ## Doxygen Documentation
 
