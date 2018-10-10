@@ -23,7 +23,7 @@ among sprints.
 
 The UML Activity diagram for this approach is shown below:
 
-![inputImage]()
+![inputImage](https://github.com/mayankpathak10/MidTerm_LaneDetection/blob/master/images/ActivityDiagram_Midterm.jpeg)
 
 ## Dependencies
 
