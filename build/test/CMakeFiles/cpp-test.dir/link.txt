@@ -1,1 +1,0 @@
-/usr/bin/c++   -g -O0 -fprofile-arcs -ftest-coverage  -fprofile-arcs -ftest-coverage CMakeFiles/cpp-test.dir/main.cpp.o CMakeFiles/cpp-test.dir/test.cpp.o  -o cpp-test -rdynamic ../vendor/googletest/googletest/libgtest.a -lpthread 

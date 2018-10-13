@@ -1,6 +1,6 @@
-#include "LaneDetector.hpp"
+#include "../include/LaneDetector.hpp"
 
-cv::Mat hsvThreshold(cv::Mat roiImage) {
+cv::Mat LaneDetector::hsvThreshold(cv::Mat roiImage) {
     cv::Mat HSV;
 
     // convert RGB roiImage to HSV
