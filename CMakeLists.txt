@@ -5,7 +5,7 @@ project (scratch)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
 # We probably don't want this to run on every build.
-option(COVERAGE "Generate Coverage Data" ON)
+option(COVERAGE "Generate Coverage Data" OFF)
 
 if (COVERAGE)
     include(CodeCoverage)
@@ -25,5 +25,5 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 14)
 
 add_subdirectory(app)
-add_subdirectory(test)
-add_subdirectory(vendor/googletest/googletest)
+# add_subdirectory(test)
+# add_subdirectory(vendor/googletest/googletest)
