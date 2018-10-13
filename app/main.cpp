@@ -23,8 +23,13 @@ int main() {
     for (int i = 100; i < 110; ++i) {
         cv::Mat testImage = LaneDetector.readFrame(i);
         cv::Mat hsv = LaneDetector.hsvThreshold(testImage);
+
+        cv::Mat roi = LaneDetector.roiMaskSelection(hsv);
         cv::namedWindow("DIsplay photos", CV_WINDOW_AUTOSIZE);
+        cv::namedWindow("DIsplay", CV_WINDOW_AUTOSIZE);
         cv::imshow("DIsplay Photos", hsv);
+        cv::imshow("DIsplay", roi);
+
         cv::waitKey(0);
     }
 
