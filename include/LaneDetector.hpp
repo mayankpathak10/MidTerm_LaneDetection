@@ -11,12 +11,13 @@ class LaneDetector {
     cv::Mat roiImage;
     cv::Mat grayImage;
     cv::Mat bwImage;
+    cv::Mat testImage;
     cv::Mat edgedImage;
     cv::Mat threshImage;
     std::vector<int> lines;
     double rho = 1;
     double theta = 1;
-    double hthreshold;
+    double threshold;
     double leftSlope;
     double rightSlope;
     double leftPoints;
