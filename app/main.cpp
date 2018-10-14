@@ -20,7 +20,7 @@ int main() {
     cv::VideoCapture frameCount("../Dataset/Dataset2.mp4");
     totalFrames = frameCount.get(CV_CAP_PROP_FRAME_COUNT);
     std::cout << "Total Frames" << totalFrames;
-    for (int i = 3150; i < 4510; ++i) {
+    for (int i = 4150; i < 4950; ++i) {
 	cv::Mat testImage = LaneDetector.readFrame(i);
 	cv::Mat hsvY = LaneDetector.hsvThresholdY(testImage);
 	cv::Mat hsvW = LaneDetector.hsvThresholdW(testImage);
@@ -37,11 +37,11 @@ int main() {
 
 	cv::Mat morphImage = LaneDetector.morph(roi);
 	cv::Mat edgedImage = LaneDetector.edgeDetector(morphImage);
+	cv::Mat linedImage = LaneDetector.houghTransform(edgedImage);
+	cv::imshow("frame", testImage);
+	cv::imshow("edges", edgedImage);
 
-	cv::imshow("DIsplay Photos", testImage);
-	cv::imshow("morph", morphImage);
-	cv::imshow("roi", edgedImage);
-
+	cv::imshow("lined", linedImage);
 	cv::waitKey(-1);
     }
 
