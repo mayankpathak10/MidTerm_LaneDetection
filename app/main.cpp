@@ -20,7 +20,7 @@ int main() {
     cv::VideoCapture frameCount("../Dataset/Dataset2.mp4");
     totalFrames = frameCount.get(CV_CAP_PROP_FRAME_COUNT);
     std::cout << "Total Frames" << totalFrames;
-    for (int i = 1000; i < 2110; ++i) {
+    for (int i = 2500; i < 3510; ++i) {
 	cv::Mat testImage = LaneDetector.readFrame(i);
 	cv::Mat hsvY = LaneDetector.hsvThresholdY(testImage);
 	cv::Mat hsvW = LaneDetector.hsvThresholdW(testImage);
@@ -35,11 +35,11 @@ int main() {
 		    cv::Scalar(255, 255, 255),   // BGR Color
 		    1);				 // Anti-alias (Optional)
 
-	cv::namedWindow("DIsplay photos", CV_WINDOW_AUTOSIZE);
-	cv::namedWindow("DIsplay", CV_WINDOW_AUTOSIZE);
-	cv::imshow("DIsplay Photos", testImage);
-	cv::imshow("DIsplay", roi);
+	cv::Mat morphImage = LaneDetector.morph(roi);
 
+	cv::imshow("DIsplay Photos", testImage);
+	cv::imshow("morph", morphImage);
+	cv::imshow("roi", roi);
 	cv::waitKey(-1);
     }
 

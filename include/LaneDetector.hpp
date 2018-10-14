@@ -31,6 +31,7 @@ class LaneDetector {
     cv::Mat roiMaskSelection(cv::Mat inputImage);
     cv::Mat hsvThresholdY(cv::Mat roiImage);
     cv::Mat hsvThresholdW(cv::Mat roiImage);
+    cv::Mat morph(cv::Mat hsv);
     cv::Mat edgeDetector(cv::Mat threshImage);
     std::vector<int> houghTransform(cv::Mat edgedImage);
     double slopeCalculation(std::vector<int>);
