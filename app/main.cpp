@@ -1,6 +1,6 @@
 /**
  * @file    main.cpp
- * @author  Mayank Pathak
+ * @authors  Mayank Pathak and Bhargav Dandamudi
  * @version 1.0
  * @copyright GNU Public License
  *
@@ -20,17 +20,27 @@ int main() {
     cv::VideoCapture frameCount("../Dataset/Dataset2.mp4");
     totalFrames = frameCount.get(CV_CAP_PROP_FRAME_COUNT);
     std::cout << "Total Frames" << totalFrames;
-    for (int i = 100; i < 110; ++i) {
-        cv::Mat testImage = LaneDetector.readFrame(i);
-        cv::Mat hsv = LaneDetector.hsvThreshold(testImage);
+    for (int i = 1000; i < 2110; ++i) {
+	cv::Mat testImage = LaneDetector.readFrame(i);
+	cv::Mat hsvY = LaneDetector.hsvThresholdY(testImage);
+	cv::Mat hsvW = LaneDetector.hsvThresholdW(testImage);
 
-        cv::Mat roi = LaneDetector.roiMaskSelection(hsv);
-        cv::namedWindow("DIsplay photos", CV_WINDOW_AUTOSIZE);
-        cv::namedWindow("DIsplay", CV_WINDOW_AUTOSIZE);
-        cv::imshow("DIsplay Photos", hsv);
-        cv::imshow("DIsplay", roi);
+	cv::Mat roiY = LaneDetector.roiMaskSelection(hsvY);
+	cv::Mat roiW = LaneDetector.roiMaskSelection(hsvW);
 
-        cv::waitKey(0);
+	cv::Mat roi = roiW + roiY;
+	cv::putText(roi, std::to_string(i), cv::Point(5, 205),   // Coordinates
+		    cv::FONT_HERSHEY_COMPLEX_SMALL,		 // Font
+		    2.0,			 // Scale. 2.0 = 2x bigger
+		    cv::Scalar(255, 255, 255),   // BGR Color
+		    1);				 // Anti-alias (Optional)
+
+	cv::namedWindow("DIsplay photos", CV_WINDOW_AUTOSIZE);
+	cv::namedWindow("DIsplay", CV_WINDOW_AUTOSIZE);
+	cv::imshow("DIsplay Photos", testImage);
+	cv::imshow("DIsplay", roi);
+
+	cv::waitKey(-1);
     }
 
     cv::destroyAllWindows();
