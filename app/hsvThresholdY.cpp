@@ -1,6 +1,6 @@
 #include "../include/LaneDetector.hpp"
 
-cv::Mat LaneDetector::hsvThreshold(cv::Mat roiImage) {
+cv::Mat LaneDetector::hsvThresholdY(cv::Mat roiImage) {
     cv::Mat HSV;
 
     // convert RGB roiImage to HSV
@@ -17,16 +17,5 @@ cv::Mat LaneDetector::hsvThreshold(cv::Mat roiImage) {
     cv::Mat bw1;
     cv::inRange(HSV, hsv_ly, hsv_hy, bw1);
 
-    //// White   color range
-    cv::Scalar hsv_lw(10, 0, 170);
-    cv::Scalar hsv_hw(200, 150, 232);
-    cv::Mat bw2;
-    cv::Mat bwImage;
-    cv::inRange(HSV, hsv_lw, hsv_hw, bw2);
-
-    bwImage = bw1 + bw2;
-
-    // imshow("Specific Colour", bw);
-
-    return bwImage;
+    return bw1;
 }
