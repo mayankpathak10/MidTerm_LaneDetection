@@ -12,8 +12,8 @@ cv::Mat LaneDetector::hsvThresholdW(cv::Mat roiImage) {
     cv::Mat v = hsv_planes[2];   // V channel
 
     //// White   color range
-    cv::Scalar hsv_lw(10, 0, 170);
-    cv::Scalar hsv_hw(200, 150, 232);
+    cv::Scalar hsv_lw(0, 0, 240);
+    cv::Scalar hsv_hw(255, 15, 255);
     cv::Mat bw2;
     cv::Mat bwImage;
     cv::inRange(HSV, hsv_lw, hsv_hw, bw2);

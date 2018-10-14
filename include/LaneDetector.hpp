@@ -33,7 +33,8 @@ class LaneDetector {
     cv::Mat hsvThresholdW(cv::Mat roiImage);
     cv::Mat morph(cv::Mat hsv);
     cv::Mat edgeDetector(cv::Mat threshImage);
-    std::vector<int> houghTransform(cv::Mat edgedImage);
+    cv::Mat houghTransform(cv::Mat);
+    // std::vector<int> houghTransform(cv::Mat edgedImage);
     double slopeCalculation(std::vector<int>);
     std::string predictTurn(double, double);
     void plotResults(cv::Mat, std::string, std::vector<int>, std::vector<int>);
