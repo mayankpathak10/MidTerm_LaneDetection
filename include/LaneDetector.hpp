@@ -29,13 +29,23 @@ class LaneDetector {
  public:
     cv::Mat readFrame(int frameNumber);
     cv::Mat roiMaskSelection(cv::Mat inputImage);
-    cv::Mat hsvThresholdY(cv::Mat roiImage);
-    cv::Mat hsvThresholdW(cv::Mat roiImage);
-    cv::Mat morph(cv::Mat hsv);
+    // cv::Mat hsvThresholdY(cv::Mat roiImage);
+    //    cv::Mat hsvThresholdW(cv::Mat roiImage);
+    //    cv::Mat morph(cv::Mat hsv);
     cv::Mat edgeDetector(cv::Mat threshImage);
-    cv::Mat houghTransform(cv::Mat);
-    // std::vector<int> houghTransform(cv::Mat edgedImage);
+    std::vector<std::vector<cv::Vec4i> > houghTransform(cv::Mat);
+    cv::Vec4d lineFitting(std::vector<cv::Vec4i>);
+
     double slopeCalculation(std::vector<int>);
     std::string predictTurn(double, double);
     void plotResults(cv::Mat, std::string, std::vector<int>, std::vector<int>);
+};
+
+class LanePredictor : public LaneDetector {
+ private:
+    cv::Mat inputImageP;
+    cv::Mat frameP;
+
+ public:
+    cv::Mat hsvThresholdY(cv::Mat frameP);
 };
