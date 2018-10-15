@@ -1,6 +1,6 @@
 /**
  * @file    main.cpp
- * @author  Mayank Pathak
+ * @authors  Mayank Pathak and Bhargav Dandamudi
  * @version 1.0
  * @copyright GNU Public License
  *
@@ -12,61 +12,94 @@
  *
  */
 
-#include <math.h>
-#include <iostream>
-#include <vector>
-#include "opencv2/highgui.hpp"
-#include "opencv2/imgproc.hpp"
-
-using namespace cv;
-using namespace std;
+#include "../include/LaneDetector.hpp"
 
 int main() {
-    Mat image;
-    image = imread("0001.jpg", CV_LOAD_IMAGE_COLOR);
+    LaneDetector LaneDetector;
+    LanePredictor LanePredictor;
+    int totalFrames;
+    cv::Vec4d dummyLanes;
+    cv::Vec4d dummyLLanes;
+    cv::VideoCapture frameCount("../Dataset/Dataset2.mp4");
 
-    if (!image.data) {
-        std::cout << "Could not open or find the image" << std::endl;
-        return -1;
+    int frame_width = frameCount.get(CV_CAP_PROP_FRAME_WIDTH);
+    int frame_height = frameCount.get(CV_CAP_PROP_FRAME_HEIGHT);
+    cv::VideoWriter video("../Output/LaneDetector.avi",
+                          CV_FOURCC('M', 'J', 'P', 'G'), 10,
+                          cv::Size(frame_width, frame_height));
+
+    totalFrames = frameCount.get(CV_CAP_PROP_FRAME_COUNT);
+    std::cout << "Total Frames" << totalFrames;
+    for (int i = 1200; i < 4950; ++i) {
+        std::cout << "reading Frame: " << i << std::endl;
+
+        cv::Mat testImage = LaneDetector.readFrame(i);
+        cv::Mat copyTest = testImage.clone();
+        cv::Vec4d rightLanes;
+        cv::Vec4d leftLanes;
+        cv::Mat edgedImage, coloredImage, coloredImageP;
+        cv::Canny(testImage, edgedImage, 50, 200, 3);
+        cv::Mat roiImage = LaneDetector.roiMaskSelection(edgedImage);
+
+        std::vector<std::vector<cv::Vec4i> > allLanes =
+            LaneDetector.houghTransform(roiImage);
+        std::cout << "right Lane size: " << allLanes[0].size() << std::endl;
+
+        if (allLanes[0].size() > 0) {
+            rightLanes = LaneDetector.lineFitting(allLanes[0], copyTest);
+            dummyLanes = rightLanes;
+        } else {
+            rightLanes = dummyLanes;
+        }
+
+        if (allLanes[1].size() > 0) {
+            leftLanes = LaneDetector.lineFitting(allLanes[1], copyTest);
+            dummyLLanes = leftLanes;
+        } else {
+            leftLanes = dummyLLanes;
+        }
+
+        cv::Vec4d yellowLanes = LanePredictor.detectYellow(copyTest);
+        std::cout << "\n\nYellow LanePoints: " << yellowLanes[0] << ","
+                  << yellowLanes[1] << ",and " << yellowLanes[2] << ","
+                  << yellowLanes[3] << std::endl;
+
+        cv::Mat output =
+            LanePredictor.plotPolygon(copyTest, leftLanes, rightLanes);
+
+        std::string laneIndicator =
+            LanePredictor.wrongLanePredictor(yellowLanes);
+        std::cout << laneIndicator << std::endl;
+        if (laneIndicator == ("Wrong Lane!!")) {
+            cv::putText(copyTest, laneIndicator,
+                        cv::Point(180, 200),      // Coordinates
+                        cv::FONT_HERSHEY_PLAIN,   // Font
+                        2,                        // Scale. 2.0 = 2x bigger
+                        cv::Scalar(0, 0, 255),    // BGR Color
+                        2);
+        } else {
+            cv::putText(copyTest, laneIndicator,
+                        cv::Point(210, 430),        // Coordinates
+                        cv::FONT_HERSHEY_SIMPLEX,   // Font
+                        0.75,                       // Scale. 2.0 = 2x bigger
+                        cv::Scalar(102, 50, 0),     // BGR Color
+                        2);
+
+        }   // Anti-alias (Optional)
+
+        cv::Mat finalOutput =
+            LanePredictor.predictTurn(leftLanes, rightLanes, copyTest);
+
+        cv::imshow("Frame", finalOutput);
+        video.write(finalOutput);
+        cv::waitKey(1);
     }
 
-    // Create a new matrix to hold the HSV image
-    Mat HSV;
+    // When everything done, release the video capture and write object
+    video.release();
 
-    // convert RGB image to HSV
-    cvtColor(image, HSV, CV_BGR2HSV);
+    // Closes all the windows
+    cv::destroyAllWindows();
 
-    namedWindow("Display window", CV_WINDOW_AUTOSIZE);
-    imshow("Display window", image);
-
-    // namedWindow("Result window", CV_WINDOW_AUTOSIZE);
-    // imshow("Result window", HSV);
-
-    vector<Mat> hsv_planes;
-    split(HSV, hsv_planes);
-    Mat h = hsv_planes[0];   // H channel
-    Mat s = hsv_planes[1];   // S channel
-    Mat v = hsv_planes[2];   // V channel
-
-    namedWindow("hue", CV_WINDOW_AUTOSIZE);
-    imshow("hue", h);
-    // namedWindow("saturation", CV_WINDOW_AUTOSIZE);
-    // imshow("saturation", s);
-    // namedWindow("value", CV_WINDOW_AUTOSIZE);
-    // imshow("value", v);
-
-    //// red color range
-    Scalar hsv_l(1, 40, 133);
-    Scalar hsv_h(90, 150, 255);
-    Mat bw;
-    inRange(HSV, hsv_l, hsv_h, bw);
-    imshow("Specific Colour", bw);
-    ////
-
-    // hue value
-
-    // define ranges
-
-    waitKey(0);
     return 0;
 }
