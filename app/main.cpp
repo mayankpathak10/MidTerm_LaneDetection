@@ -1,98 +1,158 @@
 /**
+MIT License
+
+Copyright (c) 2018 Mayank Pathak, Bhargav Dandamudi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
  * @file    main.cpp
  * @authors  Mayank Pathak and Bhargav Dandamudi
  * @version 1.0
- * @copyright GNU Public License
+ * @copyright (c) 2018 Mayank Pathak, Bhargav Dandamudi
  *
  * @brief Mid-Term Project (with partner component)
  *
  * @section DESCRIPTION
  *
  *  This is the main file for the LaneDetection implementation.
+ *  This program detects lanes from a given dataset video,
+ *  predicts turns, and predicts if the vehicle is in wrong lane
+ *  (based on Right-Hand Drive System).
  *
+ * @dependencies: This program needs the following library files in
+ *                order to execute properly.
+
+ *   detectYellow.cpp   edgeDetector.cpp  houghTransform.cpp
+ *   hsvThresholdY.cpp  lineFitting.cpp   plotPolygon.cpp
+ *   predictTurn.cpp    readFrame.cpp     roiMaskSelection.cpp
+ *   wrongLanePredictor.cpp               LaneDetector.hpp
  */
 
+// Including defined header file
 #include "../include/LaneDetector.hpp"
 
-int main() {
-    LaneDetector LaneDetector;
-    LanePredictor LanePredictor;
-    int totalFrames;
-    cv::Vec4d dummyLanes;
-    cv::Vec4d dummyLLanes;
-    cv::VideoCapture frameCount("../Dataset/Dataset2.mp4");
 
+
+/**
+ * @brief      Main function that implements Lane Detection Pipeline
+ * @Param      None
+ * @return     return 0
+ */
+int main() {
+    LaneDetector LaneDetector;  // Creating LaneDetector Object
+    LanePredictor LanePredictor;  // Creating LanePredictor Object
+    // int total_frames;  // to store total number of frames
+    cv::Vec4d last_lanes;  // to store last detected lanes
+    cv::Vec4d last_l_lanes;  // to store last detected Left lanes
+
+    // Creating Video object for Input Video
+    cv::VideoCapture frameCount("../Dataset/Dataset2.mp4");
     int frame_width = frameCount.get(CV_CAP_PROP_FRAME_WIDTH);
     int frame_height = frameCount.get(CV_CAP_PROP_FRAME_HEIGHT);
+
+    // Creating Video Object for Output Video
     cv::VideoWriter video("../Output/LaneDetector.avi",
                           CV_FOURCC('M', 'J', 'P', 'G'), 10,
                           cv::Size(frame_width, frame_height));
 
-    totalFrames = frameCount.get(CV_CAP_PROP_FRAME_COUNT);
-    std::cout << "Total Frames" << totalFrames;
-    for (int i = 1200; i < 4950; ++i) {
+    int total_frames = frameCount.get(CV_CAP_PROP_FRAME_COUNT);
+
+    // looping over all the frames to process images,
+    // detect lanes and, predict turns.
+    for (int i = 1; i < total_frames; ++i) {
+        // Printing the current frame index
         std::cout << "reading Frame: " << i << std::endl;
+        // To read the image matrix from the current frame
+        cv::Mat test_image = LaneDetector.readFrame(i);
+        // Making copy of image for plotting output
+        cv::Mat copy_test = test_image.clone();
+        // Create vector to store right lane hough lines
+        cv::Vec4d right_lanes;
+        // Create vector to store left lane hough lines
+        cv::Vec4d left_lanes;
+        cv::Mat edged_image;  // Create a matrix to store edges
 
-        cv::Mat testImage = LaneDetector.readFrame(i);
-        cv::Mat copyTest = testImage.clone();
-        cv::Vec4d rightLanes;
-        cv::Vec4d leftLanes;
-        cv::Mat edgedImage, coloredImage, coloredImageP;
-        cv::Canny(testImage, edgedImage, 50, 200, 3);
-        cv::Mat roiImage = LaneDetector.roiMaskSelection(edgedImage);
-
-        std::vector<std::vector<cv::Vec4i> > allLanes =
-            LaneDetector.houghTransform(roiImage);
-        std::cout << "right Lane size: " << allLanes[0].size() << std::endl;
-
-        if (allLanes[0].size() > 0) {
-            rightLanes = LaneDetector.lineFitting(allLanes[0], copyTest);
-            dummyLanes = rightLanes;
+        /**
+        * @brief      To find edges in the image, using canny edge detector
+        * @Param      input_image, output_image, lower_threshold,
+        *             upper_threshold, kernel_size
+        * @return     cv::Mat edged output_image
+        */
+        cv::Canny(test_image, edged_image, 50, 200, 3);
+        // Cropping region of interest
+        cv::Mat roi_image = LaneDetector.roiMaskSelection(edged_image);
+        // detecting all valid hough lines
+        std::vector<std::vector<cv::Vec4i> > all_lanes =
+            LaneDetector.houghTransform(roi_image);
+        // Condition to check if right lanes are detected
+        // if not use the last detected lanes
+        if (all_lanes[0].size() > 0) {
+            right_lanes = LaneDetector.lineFitting(all_lanes[0], copy_test);
+            last_lanes = right_lanes;
         } else {
-            rightLanes = dummyLanes;
+            right_lanes = last_lanes;
         }
 
-        if (allLanes[1].size() > 0) {
-            leftLanes = LaneDetector.lineFitting(allLanes[1], copyTest);
-            dummyLLanes = leftLanes;
+        // Condition to check if right lanes are detected
+        // if not use the last detected lanes
+        if (all_lanes[1].size() > 0) {
+            left_lanes = LaneDetector.lineFitting(all_lanes[1], copy_test);
+            last_l_lanes = left_lanes;
         } else {
-            leftLanes = dummyLLanes;
+            left_lanes = last_l_lanes;
         }
 
-        cv::Vec4d yellowLanes = LanePredictor.detectYellow(copyTest);
-        std::cout << "\n\nYellow LanePoints: " << yellowLanes[0] << ","
-                  << yellowLanes[1] << ",and " << yellowLanes[2] << ","
-                  << yellowLanes[3] << std::endl;
-
+        //  Detecting yellow lanes location to predict correct lane
+        cv::Vec4d yellow_lanes = LanePredictor.detectYellow(copy_test);
+        //  plotting polygon over detected lanes
         cv::Mat output =
-            LanePredictor.plotPolygon(copyTest, leftLanes, rightLanes);
-
+            LanePredictor.plotPolygon(copy_test, left_lanes, right_lanes);
+        //  function to check lane using detected yellow lanes
         std::string laneIndicator =
-            LanePredictor.wrongLanePredictor(yellowLanes);
-        std::cout << laneIndicator << std::endl;
+            LanePredictor.wrongLanePredictor(yellow_lanes);
+        //  display Lane status on output image frame
         if (laneIndicator == ("Wrong Lane!!")) {
-            cv::putText(copyTest, laneIndicator,
+            cv::putText(copy_test, laneIndicator,
                         cv::Point(180, 200),      // Coordinates
                         cv::FONT_HERSHEY_PLAIN,   // Font
-                        2,                        // Scale. 2.0 = 2x bigger
+                        2,                        // Scale. 2.0
                         cv::Scalar(0, 0, 255),    // BGR Color
-                        2);
+                        2);                       // thickness
         } else {
-            cv::putText(copyTest, laneIndicator,
+            cv::putText(copy_test, laneIndicator,
                         cv::Point(210, 430),        // Coordinates
                         cv::FONT_HERSHEY_SIMPLEX,   // Font
-                        0.75,                       // Scale. 2.0 = 2x bigger
+                        0.75,                       // Scale. 2.0
                         cv::Scalar(102, 50, 0),     // BGR Color
-                        2);
+                        2);                         // thickness
+        }
 
-        }   // Anti-alias (Optional)
+        // predict turn and show it on image
+        cv::Mat final_output =
+            LanePredictor.predictTurn(left_lanes, right_lanes, copy_test);
 
-        cv::Mat finalOutput =
-            LanePredictor.predictTurn(leftLanes, rightLanes, copyTest);
-
-        cv::imshow("Frame", finalOutput);
-        video.write(finalOutput);
-        cv::waitKey(1);
+        // showing final output image
+        cv::imshow("Frame", final_output);
+        // writing output video
+        video.write(final_output);
+        cv::waitKey(1);  // adding delay to show image
     }
 
     // When everything done, release the video capture and write object
