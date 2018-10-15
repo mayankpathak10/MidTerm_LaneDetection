@@ -2,20 +2,20 @@
 
 std::vector<std::vector<cv::Vec4i> > LaneDetector::houghTransform(
     cv::Mat roiImage) {
-    bool right_flag;
-    bool left_flag;
+    // bool right_flag;
+    // bool left_flag;
     std::vector<std::vector<cv::Vec4i> > Lanes(2);
     size_t j = 0;
     cv::Point ini;
     cv::Point fini;
-    double slope_thresh = 0.3;
+    double slopeThresh = 0.3;
     std::vector<double> slopes;
-    cv::Vec4d right_line;
-    cv::Vec4d left_line;
-    std::vector<cv::Point> right_pts;
-    std::vector<cv::Point> left_pts;
-    std::vector<cv::Vec4i> selected_lines;
-    std::vector<cv::Vec4i> right_lines, left_lines;
+    // cv::Vec4d right_line;
+    // cv::Vec4d left_line;
+    // std::vector<cv::Point> right_pts;
+    // std::vector<cv::Point> left_pts;
+    std::vector<cv::Vec4i> selectedLines;
+    std::vector<cv::Vec4i> rightLines, leftLines;
     std::vector<cv::Vec4i> linesP;   // for Hough
     double imgCenterY;
     imgCenterY = static_cast<double>((roiImage.cols / 2));
@@ -34,29 +34,29 @@ std::vector<std::vector<cv::Vec4i> > LaneDetector::houghTransform(
 
         // If the slope is too horizontal, discard the line
         // If not, save them  and their respective slope
-        if (std::abs(slope) > slope_thresh) {
+        if (std::abs(slope) > slopeThresh) {
             slopes.push_back(slope);
-            selected_lines.push_back(i);
+            selectedLines.push_back(i);
         }
     }
 
     // Split the lines into right and left lines
     imgCenterY = static_cast<double>((roiImage.cols / 2));
-    while (j < selected_lines.size()) {
-        ini = cv::Point(selected_lines[j][0], selected_lines[j][1]);
-        fini = cv::Point(selected_lines[j][2], selected_lines[j][3]);
+    while (j < selectedLines.size()) {
+        ini = cv::Point(selectedLines[j][0], selectedLines[j][1]);
+        fini = cv::Point(selectedLines[j][2], selectedLines[j][3]);
 
         // Condition to classify line as left side or right side
         if (slopes[j] > 0 && fini.x > imgCenterY && ini.x > imgCenterY) {
-            right_lines.push_back(selected_lines[j]);
+            rightLines.push_back(selectedLines[j]);
         } else if (slopes[j] < 0 && fini.x < imgCenterY && ini.x < imgCenterY) {
-            left_lines.push_back(selected_lines[j]);
+            leftLines.push_back(selectedLines[j]);
         }
         j++;
     }
 
-    Lanes[0] = right_lines;
-    Lanes[1] = left_lines;
+    Lanes[0] = rightLines;
+    Lanes[1] = leftLines;
 
     return Lanes;
 }

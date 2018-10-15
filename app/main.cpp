@@ -18,20 +18,15 @@ int main() {
     LaneDetector LaneDetector;
     LanePredictor LanePredictor;
     int totalFrames;
+    cv::Vec4d dummyLanes;
+    cv::Vec4d dummyLLanes;
     cv::VideoCapture frameCount("../Dataset/Dataset2.mp4");
 
     totalFrames = frameCount.get(CV_CAP_PROP_FRAME_COUNT);
     std::cout << "Total Frames" << totalFrames;
-    for (int i = 10; i < 49510; ++i) {
+    for (int i = 1000; i < 4950; ++i) {
         std::cout << "reading Frame: " << i << std::endl;
 
-        cv::Mat frameP = LanePredictor.readFrame(i);
-        cv::Mat hsvThresholdImage = LanePredictor.hsvThresholdY(frameP);
-        cv::Mat edgesP = LanePredictor.edgeDetector(hsvThresholdImage);
-        cv::Mat roiP = LanePredictor.roiMaskSelection(edgesP);
-
-        std::vector<cv::Vec4i> linesP;
-        HoughLinesP(roiP, linesP, 1, CV_PI / 180, 50, 50, 10);
         //        for (size_t i = 0; i < linesP.size(); i++) {
         //            cv::Vec4i l = linesP[i];
         //            line(frameP, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]),
@@ -41,6 +36,8 @@ int main() {
 
         cv::Mat testImage = LaneDetector.readFrame(i);
         cv::Mat copyTest = testImage.clone();
+        cv::Vec4d rightLanes;
+        cv::Vec4d leftLanes;
         cv::Mat edgedImage, coloredImage, coloredImageP;
         cv::Canny(testImage, edgedImage, 50, 200, 3);
         cv::Mat roiImage = LaneDetector.roiMaskSelection(edgedImage);
@@ -49,23 +46,74 @@ int main() {
         std::vector<std::vector<cv::Vec4i> > allLanes =
             LaneDetector.houghTransform(roiImage);
         // cv::Vec4d leftLanes = allLanes[1];
-        cv::Vec4d leftLanes = LaneDetector.lineFitting(allLanes[1]);
-        cv::Vec4d rightLanes = LaneDetector.lineFitting(allLanes[0]);
-        // cv::Vec4d yellowLanes = LaneDetector.lineFitting(linesP);
+        // cv::Vec4d leftLanes = LaneDetector.lineFitting(allLanes[1],
+        // copyTest);
+        std::cout << "right Lane size: " << allLanes[0].size() << std::endl;
+        // cv::Vec4d rightLanes;
+        if (allLanes[0].size() > 0) {
+            rightLanes = LaneDetector.lineFitting(allLanes[0], copyTest);
+            dummyLanes = rightLanes;
+        } else {
+            rightLanes = dummyLanes;
+        }
 
-        std::cout << "Left Lane Points : "
-                  << cv::Point(leftLanes[0], leftLanes[1]) << std::endl;
-        line(copyTest, cv::Point(leftLanes[0], leftLanes[1]),
-             cv::Point(leftLanes[2], leftLanes[3]), cv::Scalar(255, 255, 51), 3,
-             CV_AA);
-        line(copyTest, cv::Point(rightLanes[0], rightLanes[1]),
-             cv::Point(rightLanes[2], rightLanes[3]), cv::Scalar(0, 255, 51), 3,
-             CV_AA);
+        if (allLanes[1].size() > 0) {
+            leftLanes = LaneDetector.lineFitting(allLanes[1], copyTest);
+            dummyLLanes = leftLanes;
+        } else {
+            leftLanes = dummyLLanes;
+        }
+
+        // else {
+        //     continue;
+        // }
+        cv::Vec4d yellowLanes = LanePredictor.detectYellow(copyTest);
+        std::cout << "\n\nYellow LanePoints: " << yellowLanes[0] << ","
+                  << yellowLanes[1] << ",and " << yellowLanes[2] << ","
+                  << yellowLanes[3] << std::endl;
+
         // line(copyTest, cv::Point(yellowLanes[0], yellowLanes[1]),
-        //  cv::Point(yellowLanes[2], yellowLanes[3]),
-        // cv::Scalar(55, 255, 251), 3, CV_AA);
+        //      cv::Point(yellowLanes[2], yellowLanes[3]), cv::Scalar(255, 255,
+        //      51), 3,
+        //      CV_AA);
+        // line(copyTest, cv::Point(rightLanes[0], rightLanes[1]),
+        //     cv::Point(rightLanes[2], rightLanes[3]), cv::Scalar(0, 255, 51),
+        //     3,
+        //     CV_AA);
+        //    line(copyTest, cv::Point(leftLanes[0], leftLanes[1]),
+        //     cv::Point(leftLanes[2], leftLanes[3]), cv::Scalar(0, 255, 51), 3,
+        //     CV_AA);
 
-        imshow("results", copyTest);
+        cv::Mat output =
+            LanePredictor.plotPolygon(copyTest, leftLanes, rightLanes);
+
+        std::string laneIndicator =
+            LanePredictor.wrongLanePredictor(yellowLanes);
+        std::cout << laneIndicator << std::endl;
+        if (laneIndicator == ("Wrong Lane!!")) {
+            cv::putText(copyTest, laneIndicator,
+                        cv::Point(120, 100),              // Coordinates
+                        cv::FONT_HERSHEY_COMPLEX_SMALL,   // Font
+                        2.0,                     // Scale. 2.0 = 2x bigger
+                        cv::Scalar(0, 0, 255),   // BGR Color
+                        1);
+        } else {
+            cv::putText(copyTest, laneIndicator,
+                        cv::Point(120, 50),               // Coordinates
+                        cv::FONT_HERSHEY_COMPLEX_SMALL,   // Font
+                        2.0,                         // Scale. 2.0 = 2x bigger
+                        cv::Scalar(255, 255, 255),   // BGR Color
+                        1);
+
+        }   // Anti-alias (Optional)
+
+        // imshow("results", output);
+        // imshow("edg",copyTest);
+
+        cv::Mat finalOutput =
+            LanePredictor.predictTurn(leftLanes, rightLanes, copyTest);
+
+        imshow("Final ", finalOutput);
         cv::waitKey(-1);
     }
     cv::destroyAllWindows();

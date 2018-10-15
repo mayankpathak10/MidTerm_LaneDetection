@@ -4,6 +4,10 @@ add_executable(shell-app main.cpp LaneDetector.cpp readFrame.cpp
                  houghTransform.cpp
                  lineFitting.cpp
                  roiMaskSelection.cpp
+		 detectYellow.cpp
+		plotPolygon.cpp
+		wrongLanePredictor.cpp
+		predictTurn.cpp
 				 edgeDetector.cpp)
 target_link_libraries( shell-app ${OpenCV_LIBS})
 include_directories(
