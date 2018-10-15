@@ -22,17 +22,16 @@ int main() {
     cv::Vec4d dummyLLanes;
     cv::VideoCapture frameCount("../Dataset/Dataset2.mp4");
 
+    int frame_width = frameCount.get(CV_CAP_PROP_FRAME_WIDTH);
+    int frame_height = frameCount.get(CV_CAP_PROP_FRAME_HEIGHT);
+    cv::VideoWriter video("../Output/LaneDetector.avi",
+                          CV_FOURCC('M', 'J', 'P', 'G'), 10,
+                          cv::Size(frame_width, frame_height));
+
     totalFrames = frameCount.get(CV_CAP_PROP_FRAME_COUNT);
     std::cout << "Total Frames" << totalFrames;
-    for (int i = 1000; i < 4950; ++i) {
+    for (int i = 1200; i < 4950; ++i) {
         std::cout << "reading Frame: " << i << std::endl;
-
-        //        for (size_t i = 0; i < linesP.size(); i++) {
-        //            cv::Vec4i l = linesP[i];
-        //            line(frameP, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]),
-        //                 cv::Scalar(0, 0, 255), 3, CV_AA);
-        //        }
-        //        imshow("yellow edges", frameP);
 
         cv::Mat testImage = LaneDetector.readFrame(i);
         cv::Mat copyTest = testImage.clone();
@@ -41,15 +40,11 @@ int main() {
         cv::Mat edgedImage, coloredImage, coloredImageP;
         cv::Canny(testImage, edgedImage, 50, 200, 3);
         cv::Mat roiImage = LaneDetector.roiMaskSelection(edgedImage);
-        // cvtColor(roiImage, coloredImage, CV_GRAY2BGR);
 
         std::vector<std::vector<cv::Vec4i> > allLanes =
             LaneDetector.houghTransform(roiImage);
-        // cv::Vec4d leftLanes = allLanes[1];
-        // cv::Vec4d leftLanes = LaneDetector.lineFitting(allLanes[1],
-        // copyTest);
         std::cout << "right Lane size: " << allLanes[0].size() << std::endl;
-        // cv::Vec4d rightLanes;
+
         if (allLanes[0].size() > 0) {
             rightLanes = LaneDetector.lineFitting(allLanes[0], copyTest);
             dummyLanes = rightLanes;
@@ -64,25 +59,10 @@ int main() {
             leftLanes = dummyLLanes;
         }
 
-        // else {
-        //     continue;
-        // }
         cv::Vec4d yellowLanes = LanePredictor.detectYellow(copyTest);
         std::cout << "\n\nYellow LanePoints: " << yellowLanes[0] << ","
                   << yellowLanes[1] << ",and " << yellowLanes[2] << ","
                   << yellowLanes[3] << std::endl;
-
-        // line(copyTest, cv::Point(yellowLanes[0], yellowLanes[1]),
-        //      cv::Point(yellowLanes[2], yellowLanes[3]), cv::Scalar(255, 255,
-        //      51), 3,
-        //      CV_AA);
-        // line(copyTest, cv::Point(rightLanes[0], rightLanes[1]),
-        //     cv::Point(rightLanes[2], rightLanes[3]), cv::Scalar(0, 255, 51),
-        //     3,
-        //     CV_AA);
-        //    line(copyTest, cv::Point(leftLanes[0], leftLanes[1]),
-        //     cv::Point(leftLanes[2], leftLanes[3]), cv::Scalar(0, 255, 51), 3,
-        //     CV_AA);
 
         cv::Mat output =
             LanePredictor.plotPolygon(copyTest, leftLanes, rightLanes);
@@ -92,30 +72,33 @@ int main() {
         std::cout << laneIndicator << std::endl;
         if (laneIndicator == ("Wrong Lane!!")) {
             cv::putText(copyTest, laneIndicator,
-                        cv::Point(120, 100),              // Coordinates
-                        cv::FONT_HERSHEY_COMPLEX_SMALL,   // Font
-                        2.0,                     // Scale. 2.0 = 2x bigger
-                        cv::Scalar(0, 0, 255),   // BGR Color
-                        1);
+                        cv::Point(180, 200),      // Coordinates
+                        cv::FONT_HERSHEY_PLAIN,   // Font
+                        2,                        // Scale. 2.0 = 2x bigger
+                        cv::Scalar(0, 0, 255),    // BGR Color
+                        2);
         } else {
             cv::putText(copyTest, laneIndicator,
-                        cv::Point(120, 50),               // Coordinates
-                        cv::FONT_HERSHEY_COMPLEX_SMALL,   // Font
-                        2.0,                         // Scale. 2.0 = 2x bigger
-                        cv::Scalar(255, 255, 255),   // BGR Color
-                        1);
+                        cv::Point(210, 430),        // Coordinates
+                        cv::FONT_HERSHEY_SIMPLEX,   // Font
+                        0.75,                       // Scale. 2.0 = 2x bigger
+                        cv::Scalar(102, 50, 0),     // BGR Color
+                        2);
 
         }   // Anti-alias (Optional)
-
-        // imshow("results", output);
-        // imshow("edg",copyTest);
 
         cv::Mat finalOutput =
             LanePredictor.predictTurn(leftLanes, rightLanes, copyTest);
 
-        imshow("Final ", finalOutput);
-        cv::waitKey(-1);
+        cv::imshow("Frame", finalOutput);
+        video.write(finalOutput);
+        cv::waitKey(1);
     }
+
+    // When everything done, release the video capture and write object
+    video.release();
+
+    // Closes all the windows
     cv::destroyAllWindows();
 
     return 0;
