@@ -1,24 +1,24 @@
 #include "../include/LaneDetector.hpp"
 
 cv::Vec4d LanePredictor::detectYellow(cv::Mat frame) {
-		cv::Point ini;
-    	cv::Point fini;
-        cv::Vec4d yellowLanes;
-    	cv::Mat copyFrame;
-    	frame.copyTo(copyFrame);
-		LanePredictor LanePredictor;
-		// LanePredictor LanePredictor;
-		double slopeThresh = 0.7;
-		std::vector<double> slopes;
-        std::vector<cv::Vec4i> selectedLines;
-        // cv::Mat frame = LanePredictor.readFrame(i);
-        cv::Mat hsvThresholdImage = LanePredictor.hsvThresholdY(frame);
-        cv::Mat edgesP = LanePredictor.edgeDetector(hsvThresholdImage);
-        cv::Mat roiP = LanePredictor.roiMaskSelection(edgesP);
+    cv::Point ini;
+    cv::Point fini;
+    cv::Vec4d yellowLanes;
+    cv::Mat copyFrame;
+    frame.copyTo(copyFrame);
+    LanePredictor LanePredictor;
+    // LanePredictor LanePredictor;
+    double slopeThresh = 0.7;
+    std::vector<double> slopes;
+    std::vector<cv::Vec4i> selectedLines;
+    // cv::Mat frame = LanePredictor.readFrame(i);
+    cv::Mat hsvThresholdImage = LanePredictor.hsvThresholdY(frame);
+    cv::Mat edgesP = LanePredictor.edgeDetector(hsvThresholdImage);
+    cv::Mat roiP = LanePredictor.roiMaskSelection(edgesP);
 
-        std::vector<cv::Vec4i> linesP;
-        HoughLinesP(roiP, linesP, 1, CV_PI / 180, 10, 10, 10);
-        // std::cout<<"Size of LineP: "<<linesP.size()<<std::endl;
+    std::vector<cv::Vec4i> linesP;
+    HoughLinesP(roiP, linesP, 1, CV_PI / 180, 10, 10, 10);
+    // std::cout<<"Size of LineP: "<<linesP.size()<<std::endl;
     for (auto i : linesP) {
         // std::cout<<"Entering for loop"<<std::endl;
         ini = cv::Point(i[0], i[1]);
@@ -34,20 +34,15 @@ cv::Vec4d LanePredictor::detectYellow(cv::Mat frame) {
         if (std::abs(slope) > slopeThresh) {
             slopes.push_back(slope);
             selectedLines.push_back(i);
-            // std::cout<<"selectedSlope: "<<slope<<std::endl;
         }
     }
 
-        if (selectedLines.size()>0){
-        // std::cout<<"fitting Line"<<std::endl;    
-        yellowLanes = LanePredictor.
-        						lineFitting(selectedLines, copyFrame);
+    if (selectedLines.size() > 0) {
+        yellowLanes = LanePredictor.lineFitting(selectedLines, copyFrame);
         line(copyFrame, cv::Point(yellowLanes[0], yellowLanes[1]),
-        cv::Point(yellowLanes[2], yellowLanes[3]),
-        cv::Scalar(55, 255, 251), 3, CV_AA);
-        }
-
-        // imshow("frame",copyFrame);
+             cv::Point(yellowLanes[2], yellowLanes[3]),
+             cv::Scalar(55, 255, 251), 3, CV_AA);
+    }
 
     return yellowLanes;
 }

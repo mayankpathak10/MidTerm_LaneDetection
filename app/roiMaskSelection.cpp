@@ -9,7 +9,5 @@ cv::Mat LaneDetector::roiMaskSelection(cv::Mat hsvThreshold) {
     cv::fillConvexPoly(mask, pts, 4, cv::Scalar(255, 255, 255));
     // Multiply the edges image and the mask to get the output
     cv::bitwise_and(hsvThreshold, mask, roi);
-    // imshow("Roied",roi);
-    // hsvThreshold.copyTo(roi, mask);
     return roi;
 }
