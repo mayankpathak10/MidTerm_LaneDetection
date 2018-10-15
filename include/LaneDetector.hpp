@@ -34,8 +34,7 @@ class LaneDetector {
     //    cv::Mat morph(cv::Mat hsv);
     cv::Mat edgeDetector(cv::Mat threshImage);
     std::vector<std::vector<cv::Vec4i> > houghTransform(cv::Mat);
-    cv::Vec4d lineFitting(std::vector<cv::Vec4i>);
-
+    cv::Vec4d lineFitting(std::vector<cv::Vec4i>, cv::Mat);
     double slopeCalculation(std::vector<int>);
     std::string predictTurn(double, double);
     void plotResults(cv::Mat, std::string, std::vector<int>, std::vector<int>);
@@ -48,4 +47,8 @@ class LanePredictor : public LaneDetector {
 
  public:
     cv::Mat hsvThresholdY(cv::Mat frameP);
+    cv::Vec4d detectYellow(cv::Mat);
+    cv::Mat plotPolygon(cv::Mat, cv::Vec4d, cv::Vec4d);
+    std::string wrongLanePredictor(cv::Vec4d);
+    cv::Mat predictTurn(cv::Vec4d, cv::Vec4d, cv::Mat);
 };
