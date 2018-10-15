@@ -1,10 +1,10 @@
 #include "../include/LaneDetector.hpp"
 
-cv::Mat LaneDetector::hsvThresholdY(cv::Mat roiImage) {
+cv::Mat LanePredictor::hsvThresholdY(cv::Mat frameP) {
     cv::Mat HSV;
 
     // convert RGB roiImage to HSV
-    cv::cvtColor(roiImage, HSV, CV_BGR2HSV);
+    cv::cvtColor(frameP, HSV, CV_BGR2HSV);
     std::vector<cv::Mat> hsv_planes;
     cv::split(HSV, hsv_planes);
     cv::Mat h = hsv_planes[0];   // H channel
