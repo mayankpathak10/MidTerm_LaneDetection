@@ -50,8 +50,8 @@ cv::Mat LanePredictor::predictTurn(cv::Vec4d left_lines, cv::Vec4d right_lines,
 
     // Thresholding to predict turns
     if (vanishingPoint.x < 287) {
-        std::string output = "Left Turn Ahead!";
-        cv::putText(input_image, output, cv::Point(243, 400),   // Coordinates
+        std::string turn_predict = "Left Turn Ahead!";
+        cv::putText(input_image, turn_predict, cv::Point(243, 400),   // Coordinates
                     cv::FONT_HERSHEY_PLAIN,                    // Font
                     1.25,                     // Scale. 2.0 = 2x bigger
                     cv::Scalar(102, 51, 0),   // BGR Color
@@ -59,9 +59,9 @@ cv::Mat LanePredictor::predictTurn(cv::Vec4d left_lines, cv::Vec4d right_lines,
 
         return input_image;
     } else if (vanishingPoint.x > 317   ) {
-        std::string output = "Right Turn Ahead!";
+        std::string turn_predict = "Right Turn Ahead!";
 
-        cv::putText(input_image, output, cv::Point(243, 400),   // Coordinates
+        cv::putText(input_image, turn_predict, cv::Point(243, 400),   // Coordinates
                     cv::FONT_HERSHEY_PLAIN,                    // Font
                     1.25,                     // Scale. 2.0 = 2x bigger
                     cv::Scalar(102, 51, 0),   // BGR Color
