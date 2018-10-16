@@ -27,6 +27,10 @@ cv::Mat LanePredictor::plotPolygon(cv::Mat input_image, cv::Vec4d yellow_lanes,
                                    cv::Vec4d white_lanes) {
     cv::Mat output;
     input_image.copyTo(output);
+    cv::Point upper_yellow;
+    cv::Point lower_yellow;
+    cv::Point upper_white;
+    cv::Point lower_white;
     double ylower = 480;  // horizontal lower side of polygon
     double yupper = 360;  // horizontal upper side of polygon
     // Splitting points from yellow lane
@@ -62,9 +66,12 @@ cv::Mat LanePredictor::plotPolygon(cv::Mat input_image, cv::Vec4d yellow_lanes,
                        CV_AA);                  // Anti-Aliasing
 
     // plotting polygon boundary lines
-    line(input_image, lower_yellow, upper_yellow, cv::Scalar(25, 0, 51), 2, CV_AA);
-    line(input_image, lower_white, upper_white, cv::Scalar(25, 0, 51), 2, CV_AA);
-    line(input_image, upper_yellow, upper_white, cv::Scalar(25, 0, 51), 2, CV_AA);
+    line(input_image, lower_yellow, upper_yellow,
+         cv::Scalar(25, 0, 51), 2, CV_AA);
+    line(input_image, lower_white, upper_white,
+         cv::Scalar(25, 0, 51), 2, CV_AA);
+    line(input_image, upper_yellow, upper_white,
+         cv::Scalar(25, 0, 51), 2, CV_AA);
     // adding transparency to the polygon
     cv::addWeighted(output, 0.3, input_image, 1.0 - 0.3, 0, input_image);
 

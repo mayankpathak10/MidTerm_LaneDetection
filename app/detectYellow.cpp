@@ -28,6 +28,13 @@
 cv::Vec4d LanePredictor::detectYellow(cv::Mat frame) {
     cv::Mat copy_fame;  // to store input image copy
     frame.copyTo(copy_fame);
+    cv::Point pnt1;
+    cv::Point pnt2;
+    cv::Vec4d yellow_lanes;
+    double slope_thresh = 0.7;
+    std::vector<double> slopes;
+    std::vector<cv::Vec4i> lines_p;
+    std::vector<cv::Vec4i> selected_lines;
 
     cv::Mat hsvThresholdImage = LanePredictor::hsvThresholdY(frame);
     cv::Mat edgesP = LanePredictor::edgeDetector(hsvThresholdImage);
