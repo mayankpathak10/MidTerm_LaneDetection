@@ -76,7 +76,7 @@ int main() {
 
     // looping over all the frames to process images,
     // detect lanes and, predict turns.
-    for (int i = 1200; i < total_frames; ++i) {
+    for (int i = 1; i < total_frames; ++i) {
         // Printing the current frame index
         std::cout << "reading Frame: " << i << std::endl;
         // To read the image matrix from the current frame

@@ -23,11 +23,12 @@
  * @return lane_indicator  [string]
  */
 std::string LanePredictor::wrongLanePredictor(cv::Vec4d yellow_line) {
-    // yellow lane y reference coordinate
+
     cv::Vec4d yellow_lanes;
     cv::Vec4d white_lanes;
+    // yellow lane y reference coordinate
     double ylower = 460;
-    std::string lane_indicator = "x";
+    std::string lane_indicator = "No Lane Found :/";
     double x11 = yellow_line[0];
     double y11 = yellow_line[1];
     double x21 = yellow_line[2];

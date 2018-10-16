@@ -18,10 +18,10 @@
 
 /**
  * LanePredictor::plotPolygon
- * @param  input_image  [cv::Mat]
- * @param  yellow_lanes [cv::Vec4d]
- * @param  white_lanes  [cv::Vec4d]
- * @return output      [cv::Mat]
+ * @param[in]  input_image  [cv::Mat]
+ * @param[in]  yellow_lanes [cv::Vec4d]
+ * @param[in]  white_lanes  [cv::Vec4d]
+ * @return     output      [cv::Mat]
  */
 cv::Mat LanePredictor::plotPolygon(cv::Mat input_image, cv::Vec4d yellow_lanes,
                                    cv::Vec4d white_lanes) {

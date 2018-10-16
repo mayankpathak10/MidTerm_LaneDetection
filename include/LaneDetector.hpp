@@ -62,21 +62,21 @@ class LaneDetector {
 
 class LanePredictor : public LaneDetector {
   private:
-    // cv::Point upper_white;
-    // cv::Point lower_white;
-    // cv::Point upper_yellow;
-    // cv::Point lower_yellow;
-    // cv::Point pnt1;
-    // cv::Point pnt2;
-    // std::string lane_indicator;
+// cv::Point upper_white;
+// cv::Point lower_white;
+// cv::Point upper_yellow;
+// cv::Point lower_yellow;
+// cv::Point pnt1;
+// cv::Point pnt2;
+// std::string lane_indicator;
     cv::Mat inputImageP;
-    // std::vector<cv::Vec4i> lines_p;
+// std::vector<cv::Vec4i> lines_p;
     cv::Mat frameP;
-    // cv::Vec4d yellow_lanes;
-    // cv::Vec4d white_lanes;
-    // double slope_thresh = 0.7;
-    // std::vector<double> slopes;
-    // std::vector<cv::Vec4i> selected_lines;
+// cv::Vec4d yellow_lanes;
+// cv::Vec4d white_lanes;
+// double slope_thresh = 0.7;
+// std::vector<double> slopes;
+// std::vector<cv::Vec4i> selected_lines;
 
   public:
     cv::Mat hsvThresholdY(cv::Mat frameP);
