@@ -26,7 +26,8 @@
  */
 cv::Mat LaneDetector::edgeDetector(cv::Mat roi_image) {
 	cv::Mat edge, edge_image;
-	Canny(roi_image, edge, 0, 255, 3);
+	// cv::Canny(roi_image, edge, 0, 255, 3);
+	cv::Canny(roi_image, edge, 50, 200, 3);
 	edge.convertTo(edge_image, CV_8U);
 
 	return edge_image;

@@ -23,8 +23,8 @@
  * @param  input_image [cv::Mat]
  * @return input_image [cv::Mat]
  */
-std::string LanePredictor::predictTurn(cv::Vec4d left_lines,
-                                       cv::Vec4d right_lines, cv::Mat input_image) {
+std::string LanePredictor::predictTurn(cv::Vec4d left_lines, cv::Vec4d right_lines,
+                                       cv::Mat input_image) {
     // finding intersection point between to lanes.
     cv::Point vanishingPoint;
     // extracting points from left_lines

@@ -18,16 +18,16 @@
 
 #pragma once
 #include <iostream>
-#include <opencv2/highgui/highgui.hpp>
 #include <string>
 #include <vector>
 #include "opencv2/opencv.hpp"
+#include <opencv2/highgui/highgui.hpp>
+
 /**
  * @brief      Class for lane detector.Carries all the functions
  *             related to detect the yellow and white lanes
  */
 class LaneDetector {
-
   private:
     cv::Mat input_image;  // variable to store the frame
     cv::Mat roi_image;
@@ -43,7 +43,7 @@ class LaneDetector {
     double right_slope;
     double left_points;
     double right_points;
-    std::string turn_predict;    // variable stores the lane turn prediction
+
 
   public:
     // LaneDetector();     // Default constructor
@@ -95,7 +95,6 @@ class LaneDetector {
      * @return     { two ends of the fit line }
      */
     cv::Vec4d lineFitting(std::vector<cv::Vec4i>, cv::Mat);
-
 };
 /**
  * @brief      Class for lane predictor.
@@ -106,6 +105,7 @@ class LanePredictor : public LaneDetector {
     cv::Mat inputImageP;
 // std::vector<cv::Vec4i> lines_p;
     cv::Mat frameP;
+    std::string turn_predict;    // variable stores the lane turn prediction
 // cv::Vec4d yellow_lanes;
 // cv::Vec4d white_lanes;
 // double slope_thresh = 0.7;
@@ -164,5 +164,5 @@ class LanePredictor : public LaneDetector {
      *
      * @return     {Output Image with predicted turns text }
      */
-    cv::Mat predictTurn(cv::Vec4d, cv::Vec4d, cv::Mat);
+    std::string predictTurn(cv::Vec4d, cv::Vec4d, cv::Mat);
 };

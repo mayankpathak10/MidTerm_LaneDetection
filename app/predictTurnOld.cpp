@@ -23,8 +23,8 @@
  * @param  input_image [cv::Mat]
  * @return input_image [cv::Mat]
  */
-std::string LanePredictor::predictTurn(cv::Vec4d left_lines,
-                                       cv::Vec4d right_lines, cv::Mat input_image) {
+cv::Mat LanePredictor::predictTurn(cv::Vec4d left_lines, cv::Vec4d right_lines,
+                                   cv::Mat input_image) {
     // finding intersection point between to lanes.
     cv::Point vanishingPoint;
     // extracting points from left_lines
@@ -51,13 +51,24 @@ std::string LanePredictor::predictTurn(cv::Vec4d left_lines,
     // Thresholding to predict turns
     if (vanishingPoint.x < 287) {
         std::string turn_predict = "Left Turn Ahead!";
+        cv::putText(input_image, turn_predict, cv::Point(243, 400),   // Coordinates
+                    cv::FONT_HERSHEY_PLAIN,                    // Font
+                    1.25,                     // Scale. 2.0 = 2x bigger
+                    cv::Scalar(102, 51, 0),   // BGR Color
+                    2);                       // thickness
 
-        return turn_predict;
+        return input_image;
     } else if (vanishingPoint.x > 317   ) {
         std::string turn_predict = "Right Turn Ahead!";
 
-        return turn_predict;
+        cv::putText(input_image, turn_predict, cv::Point(243, 400),   // Coordinates
+                    cv::FONT_HERSHEY_PLAIN,                    // Font
+                    1.25,                     // Scale. 2.0 = 2x bigger
+                    cv::Scalar(102, 51, 0),   // BGR Color
+                    2);                       // thickness
+
+        return input_image;
     }
 
-    return turn_predict;
+    return input_image;
 }

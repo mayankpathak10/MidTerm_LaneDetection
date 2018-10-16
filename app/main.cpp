@@ -63,6 +63,7 @@ int main() {
     cv::Vec4d last_l_lanes;  // to store last detected Left lanes
 
     // Creating Video object for Input Video
+    // to get frame height and width
     cv::VideoCapture frameCount("../Dataset/Dataset2.mp4");
     int frame_width = frameCount.get(CV_CAP_PROP_FRAME_WIDTH);
     int frame_height = frameCount.get(CV_CAP_PROP_FRAME_HEIGHT);
@@ -89,13 +90,8 @@ int main() {
         cv::Vec4d left_lanes;
         cv::Mat edged_image;  // Create a matrix to store edges
 
-        /**
-        * @brief      To find edges in the image, using canny edge detector
-        * @Param      input_image, output_image, lower_threshold,
-        *             upper_threshold, kernel_size
-        * @return     cv::Mat edged output_image
-        */
-        cv::Canny(test_image, edged_image, 50, 200, 3);
+        // To find edges in the image, using canny edge detector
+        edged_image = LaneDetector.edgeDetector(test_image);
         // Cropping region of interest
         cv::Mat roi_image = LaneDetector.roiMaskSelection(edged_image);
         // detecting all valid hough lines
@@ -145,14 +141,24 @@ int main() {
         }
 
         // predict turn and show it on image
-        cv::Mat final_output =
+        // copy_test =
+        //     LanePredictor.predictTurn(left_lanes, right_lanes, copy_test);
+        std::string turn_predict =
             LanePredictor.predictTurn(left_lanes, right_lanes, copy_test);
 
+        //  display Lane status on output image frame
+        if (turn_predict == "Left Turn Ahead!" || turn_predict == "Right Turn Ahead!") {
+            cv::putText(copy_test, turn_predict, cv::Point(243, 400),   // Coordinates
+                        cv::FONT_HERSHEY_PLAIN,                    // Font
+                        1.25,                     // Scale. 2.0 = 2x bigger
+                        cv::Scalar(102, 51, 0),   // BGR Color
+                        2);                       // thickness
+        }
         // showing final output image
-        cv::imshow("Frame", final_output);
+        cv::imshow("Frame", copy_test);
         // writing output video
-        video.write(final_output);
-        cv::waitKey(1);  // adding delay to show image
+        video.write(copy_test);
+        cv::waitKey(0);  // adding delay to show image
     }
 
     // When everything done, release the video capture and write object
