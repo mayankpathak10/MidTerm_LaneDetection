@@ -37,7 +37,7 @@ There are two classes: LaneDetector and LanePredictor. Later is derivecd from th
 
 The UML Activity diagram for this approach is shown below:
 
-![inputImage](https://github.com/mayankpathak10/MidTerm_LaneDetection/blob/master/images/ActivityDiagram_Midterm.jpeg)
+![inputImage](https://github.com/mayankpathak10/MidTerm_LaneDetection/blob/master/UML/Revised/Revised_ActivityDiagram_Midterm.jpeg)
 
 ## Dependencies
 
@@ -108,7 +108,8 @@ To view the documents easily, access classLaneDetector.html, test_8cpp.html and 
 
 SIP has been used to implement this project. A product backlog and Time log can be found the link below:
 
-![Packagist(https://img.shields.io/badge/SIP-Click%20Here-yellow.svg)]https://docs.google.com/spreadsheets/d/1Xt0NCs74jCt25Va_o6To-D20YlPQTwmwj0yQRetGTwg/edit?usp=sharing
+[![Packagist](https://img.shields.io/badge/SIP-Click%20Here-yellow.svg)] (https://docs.google.com/spreadsheets/d/1Xt0NCs74jCt25Va_o6To-D20YlPQTwmwj0yQRetGTwg/edit?usp=sharing)
+
 
 The project consists of Two iterations:
 Iteration 1: Design UML diagrams, Add product backlog, Collected Dataset, devise Lane detection Algorithm.
