@@ -4,13 +4,16 @@ project (scratch)
 # Add project cmake modules to path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
+# Add OpenCV
+find_package( OpenCV REQUIRED)
+
 # We probably don't want this to run on every build.
-option(COVERAGE "Generate Coverage Data" ON)
+option(COVERAGE "Generate Coverage Data" OFF)
 
 if (COVERAGE)
     include(CodeCoverage)
     set(LCOV_REMOVE_EXTRA "'vendor/*'")
-    setup_target_for_coverage(code_coverage test/lanes-test coverage)
+    setup_target_for_coverage(code_coverage test/cpp-test coverage)
     set(COVERAGE_SRCS app/main.cpp
 		      app/readFrame.cpp 
 		      app/hsvThresholdY.cpp

@@ -1,4 +1,8 @@
+cmake_minimum_required(VERSION 3.2.1)
+
 FIND_PACKAGE( OpenCV REQUIRED )
+
+
 add_executable(shell-app
                   main.cpp
                  readFrame.cpp
