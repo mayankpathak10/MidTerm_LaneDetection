@@ -4,7 +4,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ---
 
-
+## Team Members
+- Mayank Pathak
+- Bhargav Dandamudi
 ## OverView
 
 The aim of this project is to develop a Traffic Lane Detection algorithm. A specific Dataset has been chosen from the available online datasets. This dataset involves low light conditions, patchy road, no lane marking in few frames, and vehicle passing other vehicles using wrong lane. 
