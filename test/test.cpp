@@ -106,7 +106,8 @@ int LaneTesting(int framenumber) {
  *@brief Test case to test if lane is detected.
  */
 TEST(LaneTest, lane_detected) {
-	EXPECT_EQ(LaneTesting(10), 1);
+	int i = LaneTesting(10);
+	EXPECT_EQ(i, 1);
 }
 
 /**
@@ -133,19 +134,22 @@ TEST(LaneTest, lane_wrong) {
  *@brief Test cases to test if lane is detected and if the lane is going straight.
  */
 TEST(LaneTest, no_turn) {
-	EXPECT_EQ(LaneTestingforTurn(5), "");
+	std::string s = LaneTestingforTurn(5);
+	EXPECT_EQ(s, "");
 }
 
 /**
  *@brief Test cases to test if lane is detected and if the lane is turning right.
  */
 TEST(LaneTest, right_turn) {
-	EXPECT_EQ(LaneTestingforTurn(178), "Right Turn Ahead!");
+	std::string s = LaneTestingforTurn(178);
+	EXPECT_EQ(s, "Right Turn Ahead!");
 }
 
 /**
  *@brief Test cases to test if lane is detected and if the lane is turning left.
  */
 TEST(LaneTest, left_turn) {
-	EXPECT_EQ(LaneTestingforTurn(438), "Left Turn Ahead!");
+	std::string s = LaneTestingforTurn(438);
+	EXPECT_EQ(s, "Left Turn Ahead!");
 }
