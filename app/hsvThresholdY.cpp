@@ -17,8 +17,11 @@
 #include "../include/LaneDetector.hpp"
 
 /**
- * LanePredictor::hsvThresholdY
- * @param  frame [cv::Mat]
+ * @brief  LanePredictor::hsvThresholdY
+ *         Split BGR image into HSV planes and apply threshold
+ *         on each plane to detect Yellow Lanes.
+ *
+ * @param[in]  frame [cv::Mat]
  * @return threshold_image [cv::Mat]
  */
 cv::Mat LanePredictor::hsvThresholdY(cv::Mat frame) {

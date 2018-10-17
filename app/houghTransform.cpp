@@ -19,12 +19,14 @@
 
 /**
  * @brief      reads image and return lane points
+ *             This file is a library file to implement hough tranform to find
+ *             lines in the edged image then classify detected lines into left
+ *             and right lane
  * @param[in]  roi_image cv::Mat
  * @return     lanes std::vector<std::vector<cv::Vec4i> >
  */
 std::vector<std::vector<cv::Vec4i> > LaneDetector::houghTransform(
     cv::Mat roi_image) {
-
     // vector to store left and right lane points
     std::vector<std::vector<cv::Vec4i> > lanes(2);
     // variable to iterate over lines
@@ -67,13 +69,17 @@ std::vector<std::vector<cv::Vec4i> > LaneDetector::houghTransform(
     // Split the lines into right and left lines
     imgCenterY = static_cast<double>((roi_image.cols / 2));
     while (iter_size < selected_lines.size()) {
-        pnt1 = cv::Point(selected_lines[iter_size][0], selected_lines[iter_size][1]);
-        pnt2 = cv::Point(selected_lines[iter_size][2], selected_lines[iter_size][3]);
+        pnt1 = cv::Point(selected_lines[iter_size][0],
+                         selected_lines[iter_size][1]);
+        pnt2 = cv::Point(selected_lines[iter_size][2],
+                         selected_lines[iter_size][3]);
 
         // Condition to classify line as left side or right side
-        if (slopes[iter_size] > 0 && pnt2.x > imgCenterY && pnt1.x > imgCenterY) {
+        if (slopes[iter_size] > 0 && pnt2.x > imgCenterY &&
+            pnt1.x > imgCenterY) {
             right_lines.push_back(selected_lines[iter_size]);
-        } else if (slopes[iter_size] < 0 && pnt2.x < imgCenterY && pnt1.x < imgCenterY) {
+        } else if (slopes[iter_size] < 0 && pnt2.x < imgCenterY &&
+                   pnt1.x < imgCenterY) {
             left_lines.push_back(selected_lines[iter_size]);
         }
         iter_size++;

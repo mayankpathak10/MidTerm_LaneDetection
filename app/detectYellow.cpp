@@ -18,15 +18,19 @@
 
 #include "../include/LaneDetector.hpp"
 
-
 /**
- * LanePredictor::detectYellow, returns end points of yellow lanes
- *         after curve fitting on points found from hough transform.
- * @param  frame [cv::Mat]
+ * @brief           LanePredictor::detectYellow,
+ *                  returns end points of yellow lanes
+ *                  after curve fitting on points found from hough transform.
+ *                  This file is a library file to detect yellow lanes as per
+ *                  hsvthreshold output. This file inherits hsvThresholdY,
+ *                  edgeDetector, roiMaskSelection and lineFitting functions
+ *                  from LaneDetector Class
+ * @param[in]  frame [cv::Mat]
  * @return       [cv::Vect4d]
  */
 cv::Vec4d LanePredictor::detectYellow(cv::Mat frame) {
-    cv::Mat copy_fame;  // to store input image copy
+    cv::Mat copy_fame;   // to store input image copy
     frame.copyTo(copy_fame);
     cv::Point pnt1;
     cv::Point pnt2;
@@ -42,18 +46,18 @@ cv::Vec4d LanePredictor::detectYellow(cv::Mat frame) {
 
     // finding hough lines from the edges found on the image
     // values of parameters found using trial and error.
-    HoughLinesP(roiP,             // Source Image
-                lines_p,           // output lines
-                1,                // rho
-                CV_PI / 180,      // theta
-                10,               // threshold of intersections
-                10,               // min Line Lengths
-                10);              // max gap between two points
+    HoughLinesP(roiP,          // Source Image
+                lines_p,       // output lines
+                1,             // rho
+                CV_PI / 180,   // theta
+                10,            // threshold of intersections
+                10,            // min Line Lengths
+                10);           // max gap between two points
 
     // extracting points from all the detected lines
     for (auto i : lines_p) {
-        pnt1 = cv::Point(i[0], i[1]);  // Point 1 of line vector
-        pnt2 = cv::Point(i[2], i[3]);  // Point 2 of line vector
+        pnt1 = cv::Point(i[0], i[1]);   // Point 1 of line vector
+        pnt2 = cv::Point(i[2], i[3]);   // Point 2 of line vector
 
         // Calculating Slope
         double slope =

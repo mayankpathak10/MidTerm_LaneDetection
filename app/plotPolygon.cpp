@@ -17,7 +17,10 @@
 #include "../include/LaneDetector.hpp"
 
 /**
- * LanePredictor::plotPolygon
+ * @brief      LanePredictor::plotPolygon
+ *             This file is a library file to plot a polygon over
+ *             detected lanes on the output frame.
+ *
  * @param[in]  input_image  [cv::Mat]
  * @param[in]  yellow_lanes [cv::Vec4d]
  * @param[in]  white_lanes  [cv::Vec4d]
@@ -31,8 +34,8 @@ cv::Mat LanePredictor::plotPolygon(cv::Mat input_image, cv::Vec4d yellow_lanes,
     cv::Point lower_yellow;
     cv::Point upper_white;
     cv::Point lower_white;
-    double ylower = 480;  // horizontal lower side of polygon
-    double yupper = 360;  // horizontal upper side of polygon
+    double ylower = 480;   // horizontal lower side of polygon
+    double yupper = 360;   // horizontal upper side of polygon
     // Splitting points from yellow lane
     double x11 = yellow_lanes[0];
     double y11 = yellow_lanes[1];
@@ -66,12 +69,12 @@ cv::Mat LanePredictor::plotPolygon(cv::Mat input_image, cv::Vec4d yellow_lanes,
                        CV_AA);                  // Anti-Aliasing
 
     // plotting polygon boundary lines
-    line(input_image, lower_yellow, upper_yellow,
-         cv::Scalar(25, 0, 51), 2, CV_AA);
-    line(input_image, lower_white, upper_white,
-         cv::Scalar(25, 0, 51), 2, CV_AA);
-    line(input_image, upper_yellow, upper_white,
-         cv::Scalar(25, 0, 51), 2, CV_AA);
+    line(input_image, lower_yellow, upper_yellow, cv::Scalar(25, 0, 51), 2,
+         CV_AA);
+    line(input_image, lower_white, upper_white, cv::Scalar(25, 0, 51), 2,
+         CV_AA);
+    line(input_image, upper_yellow, upper_white, cv::Scalar(25, 0, 51), 2,
+         CV_AA);
     // adding transparency to the polygon
     cv::addWeighted(output, 0.3, input_image, 1.0 - 0.3, 0, input_image);
 

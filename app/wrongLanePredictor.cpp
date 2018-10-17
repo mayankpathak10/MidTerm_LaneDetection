@@ -18,12 +18,14 @@
 #include "../include/LaneDetector.hpp"
 
 /**
- * [LanePredictor::wrongLanePredictor description]
- * @param  yellow_line     [cv::Vec4d]
+ * @brief   [LanePredictor::wrongLanePredictor description]
+ *          This file is a library file to predict vehicle position
+ *          based on yellow lane w.r.t. the frame size.
+ *          (Assuming Right-Hand Drive System)
+ * @param[in]  yellow_line     [cv::Vec4d]
  * @return lane_indicator  [string]
  */
 std::string LanePredictor::wrongLanePredictor(cv::Vec4d yellow_line) {
-
     cv::Vec4d yellow_lanes;
     cv::Vec4d white_lanes;
     // yellow lane y reference coordinate

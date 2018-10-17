@@ -48,19 +48,17 @@ SOFTWARE.
 // Including defined header file
 #include "../include/LaneDetector.hpp"
 
-
-
 /**
  * @brief      Main function that implements Lane Detection Pipeline
- * @Param      None
+ * @Param[in]      None
  * @return     return 0
  */
 int main() {
-    LaneDetector LaneDetector;  // Creating LaneDetector Object
-    LanePredictor LanePredictor;  // Creating LanePredictor Object
+    LaneDetector LaneDetector;     // Creating LaneDetector Object
+    LanePredictor LanePredictor;   // Creating LanePredictor Object
     // int total_frames;  // to store total number of frames
-    cv::Vec4d last_lanes;  // to store last detected lanes
-    cv::Vec4d last_l_lanes;  // to store last detected Left lanes
+    cv::Vec4d last_lanes;     // to store last detected lanes
+    cv::Vec4d last_l_lanes;   // to store last detected Left lanes
 
     // Creating Video object for Input Video
     // to get frame height and width
@@ -88,7 +86,7 @@ int main() {
         cv::Vec4d right_lanes;
         // Create vector to store left lane hough lines
         cv::Vec4d left_lanes;
-        cv::Mat edged_image;  // Create a matrix to store edges
+        cv::Mat edged_image;   // Create a matrix to store edges
 
         // To find edges in the image, using canny edge detector
         edged_image = LaneDetector.edgeDetector(test_image);
@@ -147,9 +145,11 @@ int main() {
             LanePredictor.predictTurn(left_lanes, right_lanes, copy_test);
 
         //  display Lane status on output image frame
-        if (turn_predict == "Left Turn Ahead!" || turn_predict == "Right Turn Ahead!") {
-            cv::putText(copy_test, turn_predict, cv::Point(243, 400),   // Coordinates
-                        cv::FONT_HERSHEY_PLAIN,                    // Font
+        if (turn_predict == "Left Turn Ahead!" ||
+            turn_predict == "Right Turn Ahead!") {
+            cv::putText(copy_test, turn_predict,
+                        cv::Point(243, 400),      // Coordinates
+                        cv::FONT_HERSHEY_PLAIN,   // Font
                         1.25,                     // Scale. 2.0 = 2x bigger
                         cv::Scalar(102, 51, 0),   // BGR Color
                         2);                       // thickness
@@ -158,7 +158,7 @@ int main() {
         cv::imshow("Frame", copy_test);
         // writing output video
         video.write(copy_test);
-        cv::waitKey(0);  // adding delay to show image
+        cv::waitKey(0);   // adding delay to show image
     }
 
     // When everything done, release the video capture and write object

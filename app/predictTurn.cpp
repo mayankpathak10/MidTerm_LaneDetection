@@ -17,14 +17,18 @@
 #include "../include/LaneDetector.hpp"
 
 /**
- * [LanePredictor::predictTurn]
- * @param  left_lines  [cv::Vec4d]
- * @param  right_lines [cv::Vec4d]
- * @param  input_image [cv::Mat]
- * @return input_image [cv::Mat]
+ * @brief   [LanePredictor::predictTurn]
+ *          This file is a library file to predict turns based on the
+ *          concept of vanishing point.
+ *
+ * @param[in]   left_lines  [cv::Vec4d]
+ * @param[in]   right_lines [cv::Vec4d]
+ * @param[in]   input_image [cv::Mat]
+ * @return[in]  input_image [cv::Mat]
  */
 std::string LanePredictor::predictTurn(cv::Vec4d left_lines,
-                                       cv::Vec4d right_lines, cv::Mat input_image) {
+                                       cv::Vec4d right_lines,
+                                       cv::Mat input_image) {
     // finding intersection point between to lanes.
     cv::Point vanishingPoint;
     // extracting points from left_lines
@@ -40,10 +44,12 @@ std::string LanePredictor::predictTurn(cv::Vec4d left_lines,
     double y22 = right_lines[3];
     double slope2 = ((y22 - y12) / (x22 - x12));
 
-    vanishingPoint.x = ((y22 - y11) + slope1 * x11 - slope2 * x22) /
-                       (slope1 - slope2);
-    vanishingPoint.y = (slope1 * ((y22 - y11) - (slope2 * x22)
-                                  + (slope2 * x11))) / (slope1 - slope2) + y11;
+    vanishingPoint.x =
+        ((y22 - y11) + slope1 * x11 - slope2 * x22) / (slope1 - slope2);
+    vanishingPoint.y =
+        (slope1 * ((y22 - y11) - (slope2 * x22) + (slope2 * x11))) /
+            (slope1 - slope2) +
+        y11;
 
     // plotting vanishing point
     circle(input_image, vanishingPoint, 1, cv::Scalar(0, 255, 0), 3, 8, 0);
@@ -53,7 +59,7 @@ std::string LanePredictor::predictTurn(cv::Vec4d left_lines,
         std::string turn_predict = "Left Turn Ahead!";
 
         return turn_predict;
-    } else if (vanishingPoint.x > 317   ) {
+    } else if (vanishingPoint.x > 317) {
         std::string turn_predict = "Right Turn Ahead!";
 
         return turn_predict;

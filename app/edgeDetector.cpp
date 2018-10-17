@@ -16,19 +16,21 @@
  * @dependencies: This file depends on LaneDetector.hpp
  */
 
-
 #include "../include/LaneDetector.hpp"
 
 /**
  * @brief      reads image and applys canny edge detecting.
+ *             This file is a library file to implement Canny edge detection
+ *             algorithm on the input frame. The kernel size for the edge
+ *             detection algorithm is chosen as 3.
  * @param[in]  roi_image  cv::Mat
  * @return     edge_image cv::Mat
  */
 cv::Mat LaneDetector::edgeDetector(cv::Mat roi_image) {
-	cv::Mat edge, edge_image;
-	// cv::Canny(roi_image, edge, 0, 255, 3);
-	cv::Canny(roi_image, edge, 50, 200, 3);
-	edge.convertTo(edge_image, CV_8U);
+    cv::Mat edge, edge_image;
+    // cv::Canny(roi_image, edge, 0, 255, 3);
+    cv::Canny(roi_image, edge, 50, 200, 3);
+    edge.convertTo(edge_image, CV_8U);
 
-	return edge_image;
+    return edge_image;
 }
