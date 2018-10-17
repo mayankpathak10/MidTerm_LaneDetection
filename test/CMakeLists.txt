@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 set(GTEST_SHUFFLE 1)
-#FIND_PACKAGE( OpenCV REQUIRED)
+FIND_PACKAGE( OpenCV REQUIRED)
 
 #FIND_PACKAGE(GTest REQUIRED)
 #include_directories(${GTEST_INCLUDE_DIRS})
