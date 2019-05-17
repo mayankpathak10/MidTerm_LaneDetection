@@ -8,16 +8,8 @@ FIND_PACKAGE( OpenCV REQUIRED)
 add_executable( cpp-test 
 		main.cpp 
 		test.cpp 
-                ../app/readFrame.cpp 
-		../app/hsvThresholdY.cpp
-                ../app/houghTransform.cpp
-                ../app/lineFitting.cpp
-                ../app/roiMaskSelection.cpp
-	        ../app/detectYellow.cpp
-		../app/plotPolygon.cpp
-	        ../app/wrongLanePredictor.cpp
-		../app/predictTurn.cpp
-		../app/edgeDetector.cpp
+        ../app/LaneDetector.cpp 
+        ../app/LanePredictor.cpp 
 
 )
 
