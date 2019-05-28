@@ -1,5 +1,5 @@
 # Traffic Lane Detection
-[![Build Status](https://travis-ci.com/mayankpathak10/MidTerm_LaneDetection.svg?token=g5CCRrYEPAQkT9mj2jB9&branch=mayank)](https://travis-ci.com/mayankpathak10/MidTerm_LaneDetection)
+[![Build Status](https://travis-ci.com/mayankpathak10/MidTerm_LaneDetection.svg?token=WBj4wwoZ5qm2ppsHBxfz&branch=master)](https://travis-ci.com/mayankpathak10/MidTerm_LaneDetection)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ---
