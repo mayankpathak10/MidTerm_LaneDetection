@@ -1,6 +1,6 @@
 # Traffic Lane Detection
-[![Build Status](https://travis-ci.com/bhargav-umd/AdvanceRoadLaneProcessing.svg?branch=master)](https://travis-ci.com/bhargav-umd/AdvanceRoadLaneProcessing)
-[![Coverage Status](https://coveralls.io/repos/github/bhargav-umd/AdvanceRoadLaneProcessing/badge.svg?branch=master)](https://coveralls.io/github/bhargav-umd/AdvanceRoadLaneProcessing?branch=master)
+[![Build Status](https://travis-ci.com/bhargav-umd/MidTerm_LaneDetection.svg?branch=master)](https://travis-ci.com/bhargav-umd/MidTerm_LaneDetection)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ---
 
